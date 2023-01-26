@@ -20,8 +20,8 @@ describe("BlogFactory", function () {
     it("Create blog", async () => {
       const { blogFactory, owner, addr1 } = await loadFixture(deployBlogFixture);
       await blogFactory.connect(owner).newBlog();
-      const blogAddr = await blogFactory.indexer(owner.address);
-      const blogAddrFail = await blogFactory.indexer(addr1.address);
+      const blogAddr = await blogFactory.blogs(owner.address);
+      const blogAddrFail = await blogFactory.blogs(addr1.address);
       assert(blogAddr != "0x0000000000000000000000000000000000000000");
       assert(blogAddrFail == "0x0000000000000000000000000000000000000000");
     });
@@ -29,7 +29,7 @@ describe("BlogFactory", function () {
     it("Create post", async () => {
       const { blogFactory, owner, addr1 } = await loadFixture(deployBlogFixture);
       await blogFactory.connect(owner).newBlog();
-      const blogAddr = await blogFactory.indexer(owner.address);
+      const blogAddr = await blogFactory.blogs(owner.address);
       const Blog = await ethers.getContractFactory("Blog");
       let blog = await Blog.deploy(owner.address);
       blog = await blog.attach(blogAddr);
@@ -42,7 +42,7 @@ describe("BlogFactory", function () {
     it("Transfer post", async () => {
       const { blogFactory, owner, addr1 } = await loadFixture(deployBlogFixture);
       await blogFactory.connect(owner).newBlog();
-      const blogAddr = await blogFactory.indexer(owner.address);
+      const blogAddr = await blogFactory.blogs(owner.address);
       const Blog = await ethers.getContractFactory("Blog");
       let blog = await Blog.deploy(owner.address);
       blog = await blog.attach(blogAddr);
@@ -63,8 +63,8 @@ describe("BlogFactory", function () {
       await blogFactory.connect(owner).newBlog();
       await blogFactory.connect(addr1).newBlog();
 
-      const blogAddr = await blogFactory.indexer(owner.address);
-      const blogAddr1 = await blogFactory.indexer(addr1.address);
+      const blogAddr = await blogFactory.blogs(owner.address);
+      const blogAddr1 = await blogFactory.blogs(addr1.address);
       const Blog = await ethers.getContractFactory("Blog");
       let blog = await Blog.deploy(owner.address);
       blog = await blog.attach(blogAddr);

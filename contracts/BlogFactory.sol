@@ -5,10 +5,10 @@ import "./Blog.sol";
 
 contract BlogFactory {
     
-    mapping(address => address) public indexer;
+    mapping(address => address) public blogs;
 
     function newBlog() public {
         address blogAddr = address(new Blog(msg.sender));
-        indexer[msg.sender] = blogAddr;
+        blogs[msg.sender] = blogAddr;
     }
 }
