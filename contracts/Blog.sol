@@ -1,19 +1,15 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.7;
+pragma solidity ^0.8.17;
 
-import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
-
 
 import "./Post.sol";
 
-contract Blog is AccessControl{
+contract Blog{
 
     event NewPost(address _owner, address _post);
     event TransferPost(address _oldOwner, address _newOwner, address _post);
     event NewBlogMetadata(string _URI);
-
-    bytes32 public constant OWNER = keccak256("OWNER");
 
     address public owner;
     string metadata;
@@ -21,20 +17,19 @@ contract Blog is AccessControl{
 
     constructor(address _owner){
         owner = _owner;
-        _setupRole(OWNER, _owner);
     }
 
     function setBlogMetadata(string memory _URI) public {
-        require(hasRole(OWNER, msg.sender));
+        require(owner == msg.sender, "Not authorized");
         metadata = _URI;
         emit NewBlogMetadata(_URI);
     }
 
     function newPost(string memory _name, string memory _symbol, string memory _URI) public {
-        require(hasRole(OWNER, msg.sender));
+        require(owner == msg.sender, "Not authorized");
         address postAddr = address(new Post(msg.sender, _name, _symbol, _URI));
         posts.push(postAddr);
-        emit NewPost(msg.sender, postAddr);
+        //emit NewPost(msg.sender, postAddr);
     }
 
     function getPosts() public view returns (address[] memory){
@@ -42,7 +37,7 @@ contract Blog is AccessControl{
     }
 
     function transferPost(address _postAddr, address _to) public {
-        require(hasRole(OWNER, msg.sender));
+        require(owner == msg.sender, "Not authorized");
         IERC721(_postAddr).transferFrom(msg.sender, _to, 0);
 
         uint newLength =0;
@@ -56,6 +51,8 @@ contract Blog is AccessControl{
         }
         require(found == true, "Element not found");
         posts.pop();
+        Post post = Post(_postAddr);
+        post.setNewOwner(_to);
         emit TransferPost(msg.sender, _to, _postAddr);
     }
 
@@ -64,9 +61,4 @@ contract Blog is AccessControl{
         posts.push(_postAddr);
         emit NewPost(msg.sender, _postAddr);
     }
-
-
-
-
-
 }

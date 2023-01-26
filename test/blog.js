@@ -53,16 +53,41 @@ describe("BlogFactory", function () {
       let postsBefore = await blog.getPosts();
       let toTrasfer = postsBefore[1];
 
-      /*
-      const Post = await ethers.getContractFactory("Post");
-      let post = await Post.deploy(owner.address, "n", "s", "r");
-      post = await blog.attach(toTrasfer);
-      await post.approve(blogAddr, 0);
-      */
-
       await blog.transferPost(toTrasfer, addr1.address);
       let postsAfter = await blog.getPosts();
       assert.equal(!postsAfter.includes(toTrasfer), true);
+    });
+
+    it("Add post", async () => {
+      const { blogFactory, owner, addr1 } = await loadFixture(deployBlogFixture);
+      await blogFactory.connect(owner).newBlog();
+      await blogFactory.connect(addr1).newBlog();
+
+      const blogAddr = await blogFactory.indexer(owner.address);
+      const blogAddr1 = await blogFactory.indexer(addr1.address);
+      const Blog = await ethers.getContractFactory("Blog");
+      let blog = await Blog.deploy(owner.address);
+      blog = await blog.attach(blogAddr);
+      await blog.newPost("name", "symbol", "ipfs.io");
+      await blog.newPost("name1", "symbol1", "ipfs.io1");
+      await blog.newPost("name2", "symbol2", "ipfs.io2");
+
+      let postsBefore = await blog.getPosts();
+      let toTransfer = postsBefore[1];
+      await blog.transferPost(toTransfer, addr1.address);
+
+      const Post = await ethers.getContractFactory("Post");
+      let post = await Post.deploy(owner.address, "a", "b", "c");
+      await post.deployed();
+      post = await blog.attach(toTransfer);
+
+      assert.equal(await post.owner(), addr1.address);
+      blog = await blog.attach(blogAddr1);
+      blog = await blog.connect(addr1);
+      await blog.addPost(toTransfer);
+      let posts = await blog.getPosts();
+      assert.equal(posts.includes(toTransfer), true);
+      assert.equal(posts.length, 1);
     });
   });
 });
