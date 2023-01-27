@@ -12,7 +12,7 @@ async function main() {
   console.log("Deploying contracts with the account:", deployer.address);
   console.log("Account balance:", (await deployer.getBalance()).toString());
   try {
-    let data = await fs.readFile('./artifacts/contracts/BlogFactory.sol/BlogFactory.json', 'utf8');
+    let data = await fs.readFileSync('./artifacts/contracts/BlogFactory.sol/BlogFactory.json', 'utf8');
     let jsonData = JSON.parse(data);
     const BlogFactory = new ethers.ContractFactory(jsonData.abi, jsonData.bytecode, deployer);
     const blogFactory = await BlogFactory.deploy();
