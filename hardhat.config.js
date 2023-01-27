@@ -3,6 +3,7 @@ require('dotenv').config();
 
 const MNEMONIC = process.env.MNEMONIC;
 const MUMBAI_ENDPOINT = process.env.MUMBAI_ENDPOINT;
+const GOERLI_ENDPOINT = process.env.MUMBAI_ENDPOINT;
 
 function accounts() {
   return { mnemonic: MNEMONIC };
@@ -14,6 +15,10 @@ module.exports = {
   networks: {
     mumbai: {
       url: MUMBAI_ENDPOINT,
+      accounts: accounts()
+    },
+    goerli: {
+      url: GOERLI_ENDPOINT,
       accounts: accounts()
     }
   }, settings: {

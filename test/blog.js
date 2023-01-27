@@ -1,6 +1,7 @@
 const { loadFixture } = require("@nomicfoundation/hardhat-network-helpers");
 const assert = require('assert');
 const { ethers } = require('hardhat');
+const fs = require('fs').promises;
 
 describe("BlogFactory", function () {
   // We define a fixture to reuse the same setup in every test.
@@ -88,6 +89,18 @@ describe("BlogFactory", function () {
       let posts = await blog.getPosts();
       assert.equal(posts.includes(toTransfer), true);
       assert.equal(posts.length, 1);
+    });
+
+    it("Create contract from file", async () => {
+      try {
+        let data = await fs.readFile('./artifacts/contracts/BlogFactory.sol/BlogFactory.json', 'utf8');
+        let jsonData = JSON.parse(data);
+        const [owner] = await ethers.getSigners();
+        const BlogFactory = new ethers.ContractFactory(jsonData.abi, jsonData.bytecode, owner);
+        const blogFactory = await BlogFactory.deploy();
+      } catch (err) {
+        console.log(err);
+      }
     });
   });
 });

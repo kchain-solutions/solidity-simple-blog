@@ -8,15 +8,17 @@ const hre = require("hardhat");
 
 async function main() {
   const [deployer] = await ethers.getSigners();
-
   console.log("Deploying contracts with the account:", deployer.address);
-
   console.log("Account balance:", (await deployer.getBalance()).toString());
-
-  const BlogFactory = await ethers.getContractFactory("BlogFactory");
-  const blogFactory = await BlogFactory.deploy();
-
-  console.log("Blog factory address:", blogFactory.address);
+  try {
+    let data = await fs.readFile('./artifacts/contracts/BlogFactory.sol/BlogFactory.json', 'utf8');
+    let jsonData = JSON.parse(data);
+    const BlogFactory = new ethers.ContractFactory(jsonData.abi, jsonData.bytecode, deployer);
+    const blogFactory = await BlogFactory.deploy();
+    console.log("Blog factory address:", blogFactory.address);
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 // We recommend this pattern to be able to use async/await everywhere
