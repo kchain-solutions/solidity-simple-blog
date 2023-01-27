@@ -5,21 +5,27 @@
 // will compile your contracts, add the Hardhat Runtime Environment's members to the
 // global scope, and execute the script.
 const hre = require("hardhat");
-const fs = require("fs");
 
 async function main() {
   const [deployer] = await ethers.getSigners();
   console.log("Deploying contracts with the account:", deployer.address);
   console.log("Account balance:", (await deployer.getBalance()).toString());
-  try {
-    let data = await fs.readFileSync('./artifacts/contracts/BlogFactory.sol/BlogFactory.json', 'utf8');
-    let jsonData = JSON.parse(data);
-    const BlogFactory = new ethers.ContractFactory(jsonData.abi, jsonData.bytecode, deployer);
-    const blogFactory = await BlogFactory.deploy();
-    console.log("Blog factory address:", blogFactory.address);
-  } catch (err) {
-    console.log(err);
-  }
+
+  const BlogFactory = await ethers.getContractFactory("BlogFactory");
+  const blogFactory = await BlogFactory.deploy();
+
+  const WAIT_BLOCK_CONFIRMATIONS = 6;
+  await blogFactory.deployTransaction.wait(WAIT_BLOCK_CONFIRMATIONS);
+  console.log("Waiting for", WAIT_BLOCK_CONFIRMATIONS, "confimations...");
+
+  console.log(`Contract deployed to ${blogFactory.address} on ${network.name}`);
+
+  console.log(`Verifying contract on Etherscan...`);
+
+  await run(`verify:verify`, {
+    address: blogFactory.address,
+    constructorArguments: []
+  });
 }
 
 // We recommend this pattern to be able to use async/await everywhere
