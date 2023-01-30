@@ -15,8 +15,8 @@ async function main() {
   const blogFactory = await BlogFactory.deploy();
 
   const WAIT_BLOCK_CONFIRMATIONS = 6;
-  await blogFactory.deployTransaction.wait(WAIT_BLOCK_CONFIRMATIONS);
   console.log("Waiting for", WAIT_BLOCK_CONFIRMATIONS, "confimations...");
+  await blogFactory.deployTransaction.wait(WAIT_BLOCK_CONFIRMATIONS);
 
   console.log(`Contract deployed to ${blogFactory.address} on ${network.name}`);
 

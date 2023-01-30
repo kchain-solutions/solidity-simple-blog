@@ -21,19 +21,20 @@ describe("BlogFactory", function () {
     it("Create blog", async () => {
       const { blogFactory, owner, addr1 } = await loadFixture(deployBlogFixture);
       await blogFactory.connect(owner).newBlog();
-      const blogAddr = await blogFactory.blogs(owner.address);
-      const blogAddrFail = await blogFactory.blogs(addr1.address);
-      assert(blogAddr != "0x0000000000000000000000000000000000000000");
-      assert(blogAddrFail == "0x0000000000000000000000000000000000000000");
+      const blogsAddr = await blogFactory.getBlogs(owner.address);
+      const blogAddrFail = await blogFactory.getBlogs(addr1.address);
+
+      assert(blogsAddr.length == 1);
+      assert(blogAddrFail.length == 0);
     });
 
     it("Create post", async () => {
       const { blogFactory, owner, addr1 } = await loadFixture(deployBlogFixture);
       await blogFactory.connect(owner).newBlog();
-      const blogAddr = await blogFactory.blogs(owner.address);
+      const blogsAddr = await blogFactory.getBlogs(owner.address)
       const Blog = await ethers.getContractFactory("Blog");
       let blog = await Blog.deploy(owner.address);
-      blog = await blog.attach(blogAddr);
+      blog = await blog.attach(blogsAddr[0]);
       await blog.newPost("name", "symbol", "ipfs.io");
       await blog.newPost("name1", "symbol1", "ipfs.io1");
       let posts = await blog.getPosts();
@@ -43,10 +44,10 @@ describe("BlogFactory", function () {
     it("Transfer post", async () => {
       const { blogFactory, owner, addr1 } = await loadFixture(deployBlogFixture);
       await blogFactory.connect(owner).newBlog();
-      const blogAddr = await blogFactory.blogs(owner.address);
+      const blogsAddr = await blogFactory.getBlogs(owner.address)
       const Blog = await ethers.getContractFactory("Blog");
       let blog = await Blog.deploy(owner.address);
-      blog = await blog.attach(blogAddr);
+      blog = await blog.attach(blogsAddr[0]);
       await blog.newPost("name", "symbol", "ipfs.io");
       await blog.newPost("name1", "symbol1", "ipfs.io1");
       await blog.newPost("name2", "symbol2", "ipfs.io2");
@@ -64,11 +65,11 @@ describe("BlogFactory", function () {
       await blogFactory.connect(owner).newBlog();
       await blogFactory.connect(addr1).newBlog();
 
-      const blogAddr = await blogFactory.blogs(owner.address);
-      const blogAddr1 = await blogFactory.blogs(addr1.address);
+      const blogsAddr = await blogFactory.getBlogs(owner.address)
+      const blogsAddr1 = await blogFactory.getBlogs(addr1.address);
       const Blog = await ethers.getContractFactory("Blog");
       let blog = await Blog.deploy(owner.address);
-      blog = await blog.attach(blogAddr);
+      blog = await blog.attach(blogsAddr[0]);
       await blog.newPost("name", "symbol", "ipfs.io");
       await blog.newPost("name1", "symbol1", "ipfs.io1");
       await blog.newPost("name2", "symbol2", "ipfs.io2");
@@ -83,7 +84,7 @@ describe("BlogFactory", function () {
       post = await blog.attach(toTransfer);
 
       assert.equal(await post.owner(), addr1.address);
-      blog = await blog.attach(blogAddr1);
+      blog = await blog.attach(blogsAddr1[0]);
       blog = await blog.connect(addr1);
       await blog.addPost(toTransfer);
       let posts = await blog.getPosts();

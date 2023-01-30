@@ -12,11 +12,13 @@ contract Blog{
     event NewBlogMetadata(string _URI);
 
     address public owner;
-    string metadata;
+    string public metadata;
     address[] public posts;
+    bool public isActive;
 
     constructor(address _owner){
         owner = _owner;
+        isActive = true;
     }
 
     function setBlogMetadata(string memory _URI) public {
