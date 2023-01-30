@@ -9,7 +9,7 @@ contract Blog{
 
     event NewPost(address _owner, address _post);
     event TransferPost(address _oldOwner, address _newOwner, address _post);
-    event NewBlogMetadata(string _URI);
+    event NewBlogMetadata(address blog, string _URI);
 
     address public owner;
     string public metadata;
@@ -24,14 +24,14 @@ contract Blog{
     function setBlogMetadata(string memory _URI) public {
         require(owner == msg.sender, "Not authorized");
         metadata = _URI;
-        emit NewBlogMetadata(_URI);
+        emit NewBlogMetadata(address(this), _URI);
     }
 
     function newPost(string memory _name, string memory _symbol, string memory _URI) public {
         require(owner == msg.sender, "Not authorized");
         address postAddr = address(new Post(msg.sender, _name, _symbol, _URI));
         posts.push(postAddr);
-        //emit NewPost(msg.sender, postAddr);
+        emit NewPost(msg.sender, postAddr);
     }
 
     function getPosts() public view returns (address[] memory){

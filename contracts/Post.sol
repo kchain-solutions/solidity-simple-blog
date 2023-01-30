@@ -5,8 +5,8 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
 contract Post is ERC721URIStorage{
     
-    event ContentEdited(address from, string URI);
-    event NewPostOwner(address oldOwner, address newOwner);
+    event ContentEdited(address post, address from, string URI);
+    event ChangePostOwner(address post, address oldOwner, address newOwner);
 
     address public owner;
     address public blog;
@@ -22,12 +22,12 @@ contract Post is ERC721URIStorage{
     function editContent(string memory _URI) public {
         require(msg.sender == blog || msg.sender == owner, "Not authorized");
         _setTokenURI(0, _URI);
-        emit ContentEdited(msg.sender, _URI);
+        emit ContentEdited(address(this), msg.sender, _URI);
     }
 
     function setNewOwner(address _newOwner) public {
         require(msg.sender == blog || msg.sender == owner, "Not authorized");
         owner = _newOwner;
-        emit NewPostOwner(owner, _newOwner);
+        emit ChangePostOwner(address(this), owner, _newOwner);
     }
 }
