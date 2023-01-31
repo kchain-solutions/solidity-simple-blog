@@ -7,9 +7,9 @@ import "./Post.sol";
 
 contract Blog{
 
-    event NewPost(address _owner, address _post);
-    event TransferPost(address _oldOwner, address _newOwner, address _post);
-    event NewBlogMetadata(address blog, string _URI);
+    event NewPost(address owner, address post, string URI);
+    event TransferPost(address oldOwner, address newOwner, address post);
+    event NewBlogMetadata(address blog, string URI);
 
     address public owner;
     string public metadata;
@@ -31,7 +31,7 @@ contract Blog{
         require(owner == msg.sender, "Not authorized");
         address postAddr = address(new Post(msg.sender, _name, _symbol, _URI));
         posts.push(postAddr);
-        emit NewPost(msg.sender, postAddr);
+        emit NewPost(msg.sender, postAddr, _URI);
     }
 
     function getPosts() public view returns (address[] memory){
@@ -61,6 +61,7 @@ contract Blog{
     function addPost(address _postAddr) public {
         require(msg.sender == IERC721(_postAddr).ownerOf(0), "Not owner of the NFT");
         posts.push(_postAddr);
-        emit NewPost(msg.sender, _postAddr);
+        Post post = Post(_postAddr);
+        emit NewPost(msg.sender, _postAddr, post.tokenURI(0));
     }
 }
