@@ -4,6 +4,9 @@ The project aims to create a streamlined system for managing a blogging platform
 ## BlogFactory.sol
 The BlogFactory provides access to the ```newBlog``` method, which allows the calling user to instantiate a Blog smart contract. This method can be invoked multiple times by each user. Additionally, the ```getBlogs``` method returns an array of blogs associated with a specific address provided as input.
 
+**Events**
+* ```event NewBlog(address owner, address blogAddr);```
+
 ## Blog.sol
 The following is a list of methods provided by the Blog contract:
 
@@ -13,8 +16,18 @@ The following is a list of methods provided by the Blog contract:
 * ```transferPost```: transfers ownership of a specified post.
 * ```addPost```: adds a post to your collection after it has been transferred to you.*
 
+**Events**
+* ```event NewPost(address owner, address post, string URI);```
+* ```event TransferPost(address oldOwner, address newOwner, address post);```
+* ```event NewBlogMetadata(address blog, string URI);```
+    
+    
 ## Post.sol
 The Post contract represents a post as a unique NFT entity.
+
+**Events**
+* ```event ContentEdited(address post, address from, string URI);```
+* ```event ChangePostOwner(address post, address oldOwner, address newOwner);```
 
 ## TheGraph
 The contract was used to index content using TheGraph. Here is the link to the dedicated repository
