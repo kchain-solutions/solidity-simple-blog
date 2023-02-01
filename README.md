@@ -21,10 +21,10 @@ The contract was used to index content using TheGraph. Here is the link to the d
 [TheGraph simple blog repository](https://github.com/kchain-solutions/thegraph-simple-blog)
 
 ## Example addresses (Goerli)
-BlogFactory address: [0x2259Ff8FfEF4e92454a4ef1ED516291c5A2CC3fC](https://goerli.etherscan.io/address/0x2259Ff8FfEF4e92454a4ef1ED516291c5A2CC3fC)
-Blog address: [0x9bdAC7F504ED47f4966C8A061eCf88699A7Dc99d](https://goerli.etherscan.io/address/0x9bdAC7F504ED47f4966C8A061eCf88699A7Dc99d)
-Post address: [0x389272b009219E88B5A7c7331dC432e3018194Ba](https://goerli.etherscan.io/address/0x389272b009219E88B5A7c7331dC432e3018194Ba)
-Post address: [0x0F85d4377EAa86855aA8f1ee9a8204A8cD24755f](https://goerli.etherscan.io/address/0x0F85d4377EAa86855aA8f1ee9a8204A8cD24755f)
+* BlogFactory address: [0x2259Ff8FfEF4e92454a4ef1ED516291c5A2CC3fC](https://goerli.etherscan.io/address/0x2259Ff8FfEF4e92454a4ef1ED516291c5A2CC3fC)
+* Blog address: [0x9bdAC7F504ED47f4966C8A061eCf88699A7Dc99d](https://goerli.etherscan.io/address/0x9bdAC7F504ED47f4966C8A061eCf88699A7Dc99d)
+* Post address: [0x389272b009219E88B5A7c7331dC432e3018194Ba](https://goerli.etherscan.io/address/0x389272b009219E88B5A7c7331dC432e3018194Ba)
+* Post address: [0x0F85d4377EAa86855aA8f1ee9a8204A8cD24755f](https://goerli.etherscan.io/address/0x0F85d4377EAa86855aA8f1ee9a8204A8cD24755f)
 
 
 # Hardhat command
