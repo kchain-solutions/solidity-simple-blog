@@ -1,25 +1,37 @@
-# Testnet addresses
+# Simple blog
+The project aims to create a streamlined system for managing a blogging platform through the use of smart contracts. Users can create one or multiple blogs using the BlogFactory. They can then publish Posts, each of which is represented as a unique NFT that can be traded among users. The contents of each post are stored in a JSON file on IPFS and linked to the NFT.
 
-## Blogfactory
-BlogFactory 0x0dBa2E3B3154f15335D191892D51007Ec2c0fCe4
+## BlogFactory.sol
+The BlogFactory provides access to the ```newBlog``` method, which allows the calling user to instantiate a Blog smart contract. This method can be invoked multiple times by each user. Additionally, the ```getBlogs``` method returns an array of blogs associated with a specific address provided as input.
 
-## Blog
-User blog for account 0x5d9b4894208008053e843ce594711202DF334dCE => 0x923a6432024BCF8C1cEf0b8A290B634aE728CFFE
+## Blog.sol
+The following is a list of methods provided by the Blog contract:
 
-## Post
-0x9da0c2C4a36D9320d10079b7e0ec548e71423d15
+* ```setBlogMetadata```: used to set various metadata such as the title and image of the blog.
+* ```newPost```: creates a new post, including its name, symbol, and a URI link to the IPFS resource that stores the content.
+* ```getPosts```: retrieves an array of all posts belonging to the blog.
+* ```transferPost```: transfers ownership of a specified post.
+* ```addPost```: adds a post to your collection after it has been transferred to you.*
+
+## Post.sol
+The Post contract represents a post as a unique NFT entity.
+
+## TheGraph
+The contract was used to index content using TheGraph. Here is the link to the dedicated repository
+[TheGraph simple blog repository](https://github.com/kchain-solutions/thegraph-simple-blog)
+
+## Example addresses (Goerli)
+BlogFactory address: [0x2259Ff8FfEF4e92454a4ef1ED516291c5A2CC3fC](https://goerli.etherscan.io/address/0x2259Ff8FfEF4e92454a4ef1ED516291c5A2CC3fC)
+Blog address: [0x9bdAC7F504ED47f4966C8A061eCf88699A7Dc99d](https://goerli.etherscan.io/address/0x9bdAC7F504ED47f4966C8A061eCf88699A7Dc99d)
+Post address: [0x389272b009219E88B5A7c7331dC432e3018194Ba](https://goerli.etherscan.io/address/0x389272b009219E88B5A7c7331dC432e3018194Ba)
+Post address: [0x0F85d4377EAa86855aA8f1ee9a8204A8cD24755f](https://goerli.etherscan.io/address/0x0F85d4377EAa86855aA8f1ee9a8204A8cD24755f)
 
 
-# Sample Hardhat Project
-
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
-
+# Hardhat command
 Try running some of the following tasks:
 
 ```shell
 npx hardhat help
 npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
 npx hardhat run scripts/deploy.js
 ```
