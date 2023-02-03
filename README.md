@@ -48,3 +48,12 @@ npx hardhat help
 npx hardhat test
 npx hardhat run scripts/deploy.js
 ```
+
+To deploy your own contracts you should create a ```.env``` with the wallet mnemonic passphrase and endpoint to nodes like this 
+```txt
+MNEMONIC=mnemonic here
+MUMBAI_ENDPOINT=https://polygon-mumbai.infura.io/v3/
+GOERLI_ENDPOINT=https://goerli.infura.io/v3/
+ETHERSCAN_API_KEY=
+
+```
